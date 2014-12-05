@@ -3,7 +3,7 @@ Contributors: ben.moody
 Tags: content syndicator,content syndication,content aggregator,content aggregation,content publisher,syndication network,aggregator network,seo,content publishing
 Requires at least: 3.0
 Tested up to: 4.0.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -42,6 +42,7 @@ Check the username, password, and API URL in the plugin settings and try again. 
 The plugin is saying there was an issue while importing content from your provider. This can be caused by the provider server going down or it could be under heavy load.
 
 **Wait a while then try this:**
+
 1. Click the 'Tools' tab under the 'Content Syndication' option under the 'Settings' menu in Wordpress
 2. Click the 'Sync Content' button and wait until it completes, 3. If you get the same error email again, contact your content provider
 
@@ -52,5 +53,9 @@ Not a problem, try and resync with your content provider:
 2. Click 'Reset Index', then click the 'Sync Content' button and wait until it completes
 
 == Changelog ==
+
 = 1.0 =
 Initial plugin launch.
+
+= 1.0.1 =
+Added canonical link generation for client posts.

@@ -77,6 +77,46 @@ class PrsoSyndToolkitReader {
 			new PrsoSyndReaderXMLRPC( $options );
 		}
 		
+		//Add canonical post content filter
+		add_filter( 'the_content', array($this, 'add_canonical_to_content') );
+		
+	}
+	
+	/**
+	* add_canonical_to_content
+	* 
+	* @Called By Filter 'the_content'
+	* 
+	* Adds a canonical link to the end of post content, if the post has the meta 'pcst_canonical_permalink'
+	*
+	* @access 	public
+	* @author	Ben Moody
+	*/
+	public function add_canonical_to_content( $content ) {
+		
+		//Init vars
+		global $post;
+		$post_permalink = NULL;
+		$canon_link 	= NULL;
+		$post_content	= NULL;
+		
+		//Get post url
+		$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
+		
+		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') ) {
+
+			//Cache canonical link html
+			$canon_link = sprintf( __( '<p>This article was first published on <a href="%1$s" rel="canonical">%2$s</a>.</p>', PRSOSYNDTOOLKITREADER__DOMAIN ), $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
+			
+			//Filter link html
+			$canon_link = apply_filters( 'pcst-post-canonical-link', $canon_link, $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
+			
+			//Append link to content
+			$content = $content . $canon_link;
+			
+		}
+		
+		return $content;
 	}
 	
 	/**
