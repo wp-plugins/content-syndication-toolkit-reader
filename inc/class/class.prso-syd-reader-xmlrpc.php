@@ -253,7 +253,7 @@ class PrsoSyndReaderXMLRPC {
 		//Init import
 		$this->init_post_import( $results );
 		
-		//PrsoSyndToolkitReader::plugin_error_log( $results );
+		PrsoSyndToolkitReader::plugin_error_log( $results );
 		
 		exit();
 		
@@ -384,7 +384,7 @@ class PrsoSyndReaderXMLRPC {
 			if( strpos($result['errorMsg'], 'HTTP status code was not 200') ) {
 				
 				$this->send_admin_email(
-					_x( 'Problem contacting the server. Please confirm your API Username and Password are correct.', 'text', PRSOSYNDTOOLKITREADER__DOMAIN )
+					_x( 'Problem contacting the server. Please confirm your API Username and Password are correct. Error: ' . $result['errorMsg'], 'text', PRSOSYNDTOOLKITREADER__DOMAIN )
 				);
 				
 			} else {

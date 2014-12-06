@@ -194,6 +194,10 @@ class PrsoSyndToolkitReader {
 					
 					wp_send_json_success( _x( 'Post Pull Completed', 'text', PRSOSYNDTOOLKITREADER__DOMAIN ) );
 					
+				} elseif((int) $response['response']['code'] !== 403) {
+					
+					wp_send_json_error( _x( 'Access denied to server. Your subscription may not be active OR your login details are incorrect.', 'text', PRSOSYNDTOOLKITREADER__DOMAIN ) );
+					
 				}
 				
 			}
