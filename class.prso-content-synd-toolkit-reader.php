@@ -78,7 +78,38 @@ class PrsoSyndToolkitReader {
 		}
 		
 		//Add canonical post content filter
+		add_action( 'wp_head', array($this, 'add_canonical_to_head') );
+		//Add canonical post content filter
 		add_filter( 'the_content', array($this, 'add_canonical_to_content') );
+		
+	}
+	
+	/**
+	* add_canonical_to_head
+	* 
+	* @Called By Filter 'wp_head'
+	*
+	* @access 	public
+	* @author	Ben Moody
+	*/
+	public function add_canonical_to_head() {
+		
+		//Init vars
+		global $post;
+		$post_permalink = NULL;
+		$canon_link 	= NULL;
+		$post_content	= NULL;
+		
+		//Get post url
+		$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
+		
+		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') ) {
+
+			?>
+			<link rel="canonical" href="<?php echo $post_permalink; ?>" />
+			<?php
+			
+		}
 		
 	}
 	
@@ -106,7 +137,7 @@ class PrsoSyndToolkitReader {
 		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') ) {
 
 			//Cache canonical link html
-			$canon_link = sprintf( __( '<p>This article was first published on <a href="%1$s" rel="canonical">%2$s</a>.</p>', PRSOSYNDTOOLKITREADER__DOMAIN ), $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
+			$canon_link = sprintf( __( '<p>This article was first published on <a href="%1$s">%2$s</a>.</p>', PRSOSYNDTOOLKITREADER__DOMAIN ), $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
 			
 			//Filter link html
 			$canon_link = apply_filters( 'pcst-post-canonical-link', $canon_link, $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
