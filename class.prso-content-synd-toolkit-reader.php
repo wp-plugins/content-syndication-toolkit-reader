@@ -78,9 +78,45 @@ class PrsoSyndToolkitReader {
 		}
 		
 		//Add canonical post content filter
+		add_action( 'wp', array($this, 'remove_wp_canonical_for_post') );
 		add_action( 'wp_head', array($this, 'add_canonical_to_head') );
 		//Add canonical post content filter
 		add_filter( 'the_content', array($this, 'add_canonical_to_content') );
+		
+	}
+	
+	/**
+	* remove_wp_canonical_for_post
+	* 
+	* @Called By Filter 'wp'
+	*
+	* Detects if a content syndication canonical link is set for this post
+	* if so then disable the wp canonical meta output
+	*
+	* @access 	public
+	* @author	Ben Moody
+	*/
+	public function remove_wp_canonical_for_post() {
+		
+		//Init vars
+		global $post;
+		$post_permalink = NULL;
+		$canon_link 	= NULL;
+		$post_content	= NULL;
+		
+		if( isset($post->ID) ) {
+			
+			//Get post url
+			$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
+			
+			if( isset($post_permalink) && !empty($post_permalink) ) {
+	
+				//Remove wp canonical meta from head
+				remove_action('wp_head', 'rel_canonical');
+				
+			}
+			
+		}
 		
 	}
 	
@@ -100,15 +136,17 @@ class PrsoSyndToolkitReader {
 		$canon_link 	= NULL;
 		$post_content	= NULL;
 		
-		//Get post url
-		$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
-		
-		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') ) {
-
-			?>
-			<link rel="canonical" href="<?php echo $post_permalink; ?>" />
-			<?php
+		if( isset($post->ID) ) {
+			//Get post url
+			$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
 			
+			if( isset($post_permalink) && !empty($post_permalink) ) {
+	
+				?>
+				<link rel="canonical" href="<?php echo $post_permalink; ?>" />
+				<?php
+				
+			}
 		}
 		
 	}
@@ -127,17 +165,33 @@ class PrsoSyndToolkitReader {
 		
 		//Init vars
 		global $post;
-		$post_permalink = NULL;
-		$canon_link 	= NULL;
-		$post_content	= NULL;
+		$post_permalink 		= NULL;
+		$post_permalink_text 	= NULL;
+		$canon_link 			= NULL;
+		$post_content			= NULL;
 		
 		//Get post url
 		$post_permalink = get_post_meta( $post->ID, 'pcst_canonical_permalink', TRUE );
 		
-		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') ) {
+		//Get post permalink (back link) text
+		$post_permalink_text = get_post_meta( $post->ID, 'pcst_back_link_text', TRUE );
+		
+		//Check for valid text
+		if( empty($post_permalink_text) ) {
+		
+			$post_permalink_text = _x( 'This article was first published on', 'text', PRSOSYNDTOOLKITREADER__DOMAIN );
+			
+		} elseif( $post_permalink_text == 'false' ) {
+			
+			//Disable back link output
+			$post_permalink_text = NULL;
+			
+		}
+		
+		if( isset($post->post_type, $post_permalink) && ($post->post_type == 'post') && !empty($post_permalink_text) ) {
 
 			//Cache canonical link html
-			$canon_link = sprintf( __( '<p>This article was first published on <a href="%1$s">%2$s</a>.</p>', PRSOSYNDTOOLKITREADER__DOMAIN ), $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
+			$canon_link = sprintf( __( '<p>%1$s <a href="%2$s">%3$s</a>.</p>', PRSOSYNDTOOLKITREADER__DOMAIN ), $post_permalink_text, $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
 			
 			//Filter link html
 			$canon_link = apply_filters( 'pcst-post-canonical-link', $canon_link, $post_permalink, PrsoSyndToolkitReader::$class_config['xmlrpc']['url'] );
