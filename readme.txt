@@ -66,6 +66,9 @@ Improved update speed, some backend minor fixes.
 = 1.0.3 =
 Adds support for advanced SEO options in Content Syndication Toolkit PRO
 
+= 1.0.4 =
+BugFix: Added support for iframe content such as Youtube, Soundcloud, ect
+
 == Upgrade Notice ==
 
 = 1.0.2 =
@@ -73,11 +76,6 @@ Improved update speed, some backend minor fixes.
 
 = 1.0.3 =
 Adds support for advanced SEO options in Content Syndication Toolkit PRO
-
-= 1.0.4 =
-BugFix: Added support for iframe content such as Youtube, Soundcloud, ect
-
-== Upgrade Notice ==
 
 = 1.0.4 =
 BugFix: Added support for iframe content such as Youtube, Soundcloud, ect
