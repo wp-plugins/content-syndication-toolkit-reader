@@ -592,7 +592,7 @@ class WP_Import extends WP_Importer {
 
 		unset( $this->posts );
 	}
-
+	
 	/**
 	 * Attempt to create a new menu item from import data
 	 *

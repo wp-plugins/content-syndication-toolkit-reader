@@ -3,7 +3,7 @@ Contributors: ben.moody
 Tags: content syndicator,content syndication,content aggregator,content aggregation,content publisher,syndication network,aggregator network,seo,content publishing
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -73,3 +73,11 @@ Improved update speed, some backend minor fixes.
 
 = 1.0.3 =
 Adds support for advanced SEO options in Content Syndication Toolkit PRO
+
+= 1.0.4 =
+BugFix: Added support for iframe content such as Youtube, Soundcloud, ect
+
+== Upgrade Notice ==
+
+= 1.0.4 =
+BugFix: Added support for iframe content such as Youtube, Soundcloud, ect

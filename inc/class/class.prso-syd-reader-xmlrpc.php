@@ -236,6 +236,9 @@ class PrsoSyndReaderXMLRPC {
 		$params 	= array();
 		$results	= NULL;
 		
+		//Expand allowed tags for post content santization iframes, ect
+		add_filter('wp_kses_allowed_html', array($this, 'expand_kses_allowed_tags'), 10, 2);
+		
 		//Add any metyhod specific params in $params[3] as array
 		$params = array(
 			'last_date' => get_option( PRSOSYNDTOOLKITREADER__LAST_IMPORT_OPTION ) //Get plugin option stating the end date of the last post pull & pass as a param
@@ -256,6 +259,31 @@ class PrsoSyndReaderXMLRPC {
 		PrsoSyndToolkitReader::plugin_error_log( $results );
 		
 		exit();
+		
+	}
+	
+	/**
+	* get_syndication_posts
+	* 
+	* @Called By Filter 'wp_kses_allowed_html'
+	*
+	* Expand allowed tags for post content santization iframes, ect
+	* 
+	* @access 	public
+	* @author	Ben Moody
+	*/
+	public function expand_kses_allowed_tags( $allowed, $context ) {
+		
+		// iframe
+		$allowed['iframe'] = array(
+			'src' => array(),
+			'height' => array(),
+			'width' => array(),
+			'frameborder' => array(),
+			'allowfullscreen' => array(),
+		); 
+
+		return $allowed;
 		
 	}
 	
